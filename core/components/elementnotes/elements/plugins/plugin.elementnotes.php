@@ -1,0 +1,57 @@
+<?php
+switch ($modx->event->name) {
+	// add the "Note" tab
+	case 'OnTempFormPrerender':
+		$enTabs = 'modx-template-tabs';
+	case 'OnChunkFormPrerender':
+		if (!isset($enTabs)) $enTabs = 'modx-chunk-tabs';
+	case 'OnSnipFormPrerender':
+		if (!isset($enTabs)) $enTabs = 'modx-snippet-tabs';
+	case 'OnPluginFormPrerender':
+		if (!isset($enTabs)) $enTabs = 'modx-plugin-tabs';
+		if ($mode == modSystemEvent::MODE_UPD) {
+			//$modx->lexicon->load('elementnotes:default');
+			$modx->controller->addLexiconTopic('elementnotes:default');
+			$modx->controller->addJavascript($modx->getOption('assets_url') . 'components/elementnotes/js/mgr/elementnotes.js');
+			$modx->controller->addLastJavascript($modx->getOption('assets_url') . 'components/elementnotes/js/mgr/widgets/elementnotes.panel.js');
+			$_html = '<script>
+				var elemNotes = {};
+				elemNotes.config = {"connector_url" : "'.$modx->getOption('assets_url').'components/elementnotes/connector.php"};
+				Ext.ComponentMgr.onAvailable("'.$enTabs.'", function() {
+					this.on("beforerender", function() {
+						this.add({
+								xtype: "elementnotes-page",
+								id: "elementnotes-tab",
+								title: _("Notes")
+						});
+					});
+				});</script>';
+			$modx->controller->addHtml($_html);
+		}
+		break;
+	// Remove the element note
+	case 'OnChunkRemove':
+		$type = 'chunk';
+		$id = $chunk->id;
+	case 'OnPluginRemove':
+		if (!isset($type)) {
+			$type = 'plugin';
+			$id = $plugin->id;
+		}
+	case 'OnSnippetRemove':
+		if (!isset($type)) {
+			$type = 'snippet';
+			$id = $snippet->id;
+		}
+	case 'OnTemplateRemove':
+		if (!isset($type)) {
+			$type = 'template';
+			$id = $template->id;
+		}
+
+		/** @var elementNotes $elementNotes */
+		$elementNotes = $modx->getService('elementnotes', 'elementNotes', $modx->getOption('core_path') . 'components/elementnotes/model/elementnotes/');
+		if (isset($type) && isset($id))	$elementNotes->removeNote($type,$id);
+		break;
+}
+//unset($enTabs,$_html);
