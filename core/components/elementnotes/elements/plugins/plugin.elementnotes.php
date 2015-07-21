@@ -10,21 +10,21 @@ switch ($modx->event->name) {
 	case 'OnPluginFormPrerender':
 		if (!isset($enTabs)) $enTabs = 'modx-plugin-tabs';
 		if ($mode == modSystemEvent::MODE_UPD) {
-			//$modx->lexicon->load('elementnotes:default');
 			$modx->controller->addLexiconTopic('elementnotes:default');
 			$modx->controller->addJavascript($modx->getOption('assets_url') . 'components/elementnotes/js/mgr/elementnotes.js');
 			$modx->controller->addLastJavascript($modx->getOption('assets_url') . 'components/elementnotes/js/mgr/widgets/elementnotes.panel.js');
 			$_html = '<script>
 				var elemNotes = {};
 				elemNotes.config = {"connector_url" : "'.$modx->getOption('assets_url').'components/elementnotes/connector.php"};
-				Ext.ComponentMgr.onAvailable("'.$enTabs.'", function() {
-					this.on("beforerender", function() {
-						this.add({
-								xtype: "elementnotes-page",
-								id: "elementnotes-tab",
-								title: _("Notes")
-						});
-					});
+				Ext.onReady(function() {
+					MODx.addTab("'.$enTabs.'",{
+						id: "elementnotes-tab",
+						title: _("Notes"),
+						items: [{
+	                            xtype: "elementnotes-page",
+	                            width: "100%"
+	                        }]
+			        });
 				});</script>';
 			$modx->controller->addHtml($_html);
 		}
@@ -54,4 +54,3 @@ switch ($modx->event->name) {
 		if (isset($type) && isset($id))	$elementNotes->removeNote($type,$id);
 		break;
 }
-//unset($enTabs,$_html);
