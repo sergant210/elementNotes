@@ -19,7 +19,7 @@ elementNotes.panel.Notes = function(config) {
 			style: {padding: '5px', overflow: 'hidden'},
 			layout: 'anchor',
 			items: [{
-				xtype: 'modx-texteditor',
+				xtype: Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'textarea',
 				cls: 'elementnotes-note',
 				id: 'elementnotes-text',
 				grow: true,
