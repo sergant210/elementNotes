@@ -21,10 +21,10 @@ switch ($modx->event->name) {
 						id: "elementnotes-tab",
 						title: _("Notes"),
 						items: [{
-	                            xtype: "elementnotes-page",
-	                            width: "100%"
-	                        }]
-			        });
+							xtype: "elementnotes-page",
+							width: "100%"
+						}]
+					});
 				});</script>';
 			$modx->controller->addHtml($_html);
 		}
