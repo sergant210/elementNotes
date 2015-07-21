@@ -2,6 +2,7 @@ elementNotes.panel.Notes = function(config) {
 	config = config || {};
 
 	Ext.apply(config,{
+		//url: elementNotes.config.connector_url,
 		listeners: {
 			render: {fn: function(a) {
 				this.getElementNote();
@@ -24,13 +25,35 @@ elementNotes.panel.Notes = function(config) {
 				grow: true,
 				growMin: '400',
 				growMax: '500',
-				width: '100%'
+				width: '100%',
+				enableKeyEvents: true,
+				listeners: {
+					keyup: {
+						fn: function () {
+							var button = Ext.getCmp('elementnotes-save-btn');
+							if (this.value !== this.getValue()) {
+								if (button.disabled) {
+									button.setDisabled(false);
+								}
+							} else {
+								if (!button.disabled) {
+									button.setDisabled(true);
+								}
+							}
+						}
+					}
+				}
 			},{
 				xtype: 'button',
 				id: 'elementnotes-save-btn',
 				text: _('save'),
 				cls: 'primary-button',
-				style: {margin: '10px 0'},
+				style: {marginTop: '10px'},
+				disabled: true,
+				/*keys: [{
+				 key: MODx.config.keymap_save || 's'
+				 ,ctrl: true
+				 }],*/
 				listeners: {
 					click: {fn:function() {
 						if (this.disabled) return false;
@@ -57,6 +80,7 @@ elementNotes.panel.Notes = function(config) {
 							listeners: {
 								'success': {fn:function(r) {
 									if (r.success) {
+										this.setDisabled(true);
 										this.setText(_('save'));
 									}
 								},scope:this}
@@ -96,6 +120,7 @@ Ext.extend(elementNotes.panel.Notes,MODx.Panel, {
 				},scope:this}
 			}
 		});
+		//document.getElementById('minishop2-product-header-image').src = thumb;
 	}
 
 });
