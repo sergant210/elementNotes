@@ -19,6 +19,17 @@ if ($object->xpdo) {
 			break;
 
 		case xPDOTransport::ACTION_UPGRADE:
+			$modelPath = $modx->getOption('elementnotes_core_path', null, $modx->getOption('core_path') . 'components/elementnotes/') . 'model/';
+			$modx->addPackage('elementnotes', $modelPath);
+
+			$manager = $modx->getManager();
+			$objects = array(
+				'elementNote',
+			);
+			foreach ($objects as $tmp) {
+				$manager->addField($tmp, 'name');
+				$manager->addIndex($tmp, 'type_name');
+			}
 			break;
 
 		case xPDOTransport::ACTION_UNINSTALL:

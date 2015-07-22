@@ -2,7 +2,6 @@ elementNotes.panel.Notes = function(config) {
 	config = config || {};
 
 	Ext.apply(config,{
-		//url: elementNotes.config.connector_url,
 		listeners: {
 			render: {fn: function(a) {
 				this.getElementNote();
@@ -75,7 +74,8 @@ elementNotes.panel.Notes = function(config) {
 								action: 'mgr/note/save',
 								id: MODx.request.id,
 								type: type,
-								text: text
+								text: text,
+								name: elemName
 							},
 							listeners: {
 								'success': {fn:function(r) {
@@ -110,7 +110,8 @@ Ext.extend(elementNotes.panel.Notes,MODx.Panel, {
 			params: {
 				action: 'mgr/note/get',
 				id: MODx.request.id,
-				type: type
+				type: type,
+				name: elemName
 			},
 			listeners: {
 				'success': {fn:function(r) {
@@ -120,7 +121,6 @@ Ext.extend(elementNotes.panel.Notes,MODx.Panel, {
 				},scope:this}
 			}
 		});
-		//document.getElementById('minishop2-product-header-image').src = thumb;
 	}
 
 });

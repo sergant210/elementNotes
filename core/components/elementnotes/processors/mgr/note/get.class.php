@@ -17,11 +17,14 @@ class elementNoteGetProcessor extends modObjectGetProcessor {
 	public function initialize() {
 		$id = $this->getProperty('id');
 		$type = $this->getProperty('type');
+		$name = $this->getProperty('name');
 		$primaryKeys =  array('type'=>$type, 'id'=>$id);
 
 		if (empty($primaryKeys)) return $this->modx->lexicon($this->objectType.'_err_nf');
 		if (!$this->object = $this->modx->getObject($this->classKey,$primaryKeys)) {
-			return $this->modx->lexicon($this->objectType . '_err_nf');
+			if (!$this->object = $this->modx->getObject($this->classKey,array('type'=>$type, 'name' => $name))) {
+				return '';
+			}
 		}
 
 		return true;
