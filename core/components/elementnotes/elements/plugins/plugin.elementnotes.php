@@ -3,23 +3,23 @@ switch ($modx->event->name) {
 	// add the "Note" tab
 	case 'OnTempFormPrerender':
 		$enTabs = 'modx-template-tabs';
-		$name = $template->get('templatename');
+		if ($mode == modSystemEvent::MODE_UPD) $name = $template->get('templatename');
 	case 'OnChunkFormPrerender':
-		if (!isset($enTabs)) {
+		if (!isset($enTabs) && $mode == modSystemEvent::MODE_UPD) {
 			$enTabs = 'modx-chunk-tabs';
 			$name = $chunk->get('name');
 		}
 	case 'OnSnipFormPrerender':
-		if (!isset($enTabs)) {
+		if (!isset($enTabs) && $mode == modSystemEvent::MODE_UPD) {
 			$enTabs = 'modx-snippet-tabs';
 			$name = $snippet->get('name');
 		}
 	case 'OnPluginFormPrerender':
-		if (!isset($enTabs)) {
-			$enTabs = 'modx-plugin-tabs';
-			$name = $plugin->get('name');
-		}
 		if ($mode == modSystemEvent::MODE_UPD) {
+			if (!isset($enTabs)) {
+				$enTabs = 'modx-plugin-tabs';
+				$name = $plugin->get('name');
+			}
 			$modx->controller->addLexiconTopic('elementnotes:default');
 			$modx->controller->addJavascript($modx->getOption('assets_url') . 'components/elementnotes/js/mgr/elementnotes.js');
 			$modx->controller->addLastJavascript($modx->getOption('assets_url') . 'components/elementnotes/js/mgr/widgets/elementnotes.panel.js');
