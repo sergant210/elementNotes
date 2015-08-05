@@ -40,8 +40,6 @@ class elementNotes {
 	public function removeNote($type,$id){
 		if ($Note = $this->modx->getObject('elementNote', array('type'=>$type, 'id'=>$id))){
 			$Note->remove();
-		} else {
-			$this->modx->log(modX::LOG_LEVEL_ERROR, $this->modx->lexicon('elementNote_err_remove', array('type'=>$type, 'id'=>$id)));
 		}
 	}
 

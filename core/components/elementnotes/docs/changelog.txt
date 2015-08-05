@@ -1,5 +1,9 @@
 Changelog for elementNotes.
 
+1.0.1-pl
+==============
+- Refactor code.
+
 1.0.0-pl
 ==============
-- Initial release
+- Initial release.
