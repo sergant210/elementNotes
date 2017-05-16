@@ -9,15 +9,14 @@ $xpdo_meta_map['elementNote']= array (
     'id' => NULL,
     'type' => NULL,
     'text' => NULL,
+    'createdon' => NULL,
   ),
   'fieldMeta' => 
   array (
     'id' => 
     array (
-      'dbtype' => 'int',
-      'precision' => '10',
-      'attributes' => 'unsigned',
-      'phptype' => 'integer',
+      'dbtype' => 'mediumtext',
+      'phptype' => 'string',
       'null' => false,
       'index' => 'pk',
     ),
@@ -35,6 +34,15 @@ $xpdo_meta_map['elementNote']= array (
       'phptype' => 'string',
       'null' => false,
     ),
+    'createdon' => 
+    array (
+      'dbtype' => 'int',
+      'precision' => '20',
+      'phptype' => 'integer',
+      'attributes' => 'unsigned',
+      'null' => false,
+      'index' => 'pk',
+    ),
   ),
   'indexes' => 
   array (
@@ -48,11 +56,17 @@ $xpdo_meta_map['elementNote']= array (
       array (
         'id' => 
         array (
-          'length' => '',
+          'length' => '255',
           'collation' => 'A',
           'null' => false,
         ),
         'type' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+        'createdon' => 
         array (
           'length' => '',
           'collation' => 'A',

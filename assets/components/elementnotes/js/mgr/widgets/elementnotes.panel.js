@@ -2,12 +2,8 @@ elementNotes.panel.Notes = function(config) {
 	config = config || {};
 
 	Ext.apply(config,{
-		listeners: {
-			render: {fn: function(a) {
-				this.getElementNote();
-			}, scope: this}
-		},
-		id: 'elementnotes-page',
+		listeners:{render: {fn:function(a){this.getElementNote();},scope:this}},
+		id:'elementnotes-panel',
 		items: [{
 			border: false,
 			baseCls: 'panel-desc',
@@ -49,67 +45,31 @@ elementNotes.panel.Notes = function(config) {
 				cls: 'primary-button',
 				style: {marginTop: '10px'},
 				disabled: true,
-				/*keys: [{
-				 key: MODx.config.keymap_save || 's'
-				 ,ctrl: true
-				 }],*/
 				listeners: {
-					click: {fn:function() {
-						if (this.disabled) return false;
-						var type = '';
-						if (MODx.request.a.indexOf('snippet') > 0)
-							type = 'snippet';
-						else if (MODx.request.a.indexOf('chunk') > 0)
-							type = 'chunk';
-						else if (MODx.request.a.indexOf('plugin') > 0)
-							type = 'plugin';
-						else if (MODx.request.a.indexOf('template') > 0)
-							type = 'template';
-						var text = Ext.getCmp('elementnotes-text').getValue();
-
-						this.setText(_('saving'));
-						MODx.Ajax.request({
-							url: elemNotes.config.connector_url,
-							params: {
-								action: 'mgr/note/save',
-								id: MODx.request.id,
-								type: type,
-								text: text
-							},
-							listeners: {
-								'success': {fn:function(r) {
-									if (r.success) {
-										this.setDisabled(true);
-										this.setText(_('save'));
-									}
-								},scope:this}
-							}
-						});
-					}}
+					click: {fn:function(btn) {
+						if(btn.disabled)return false;
+						btn.setText(_('saving'));
+						this.saveElementNote();
+					},scope:this}
 				}
 			}]
 		}]
 	});
 	elementNotes.panel.Notes.superclass.constructor.call(this,config);
+	this.on('afterSave',function(){
+		btn = Ext.getCmp('elementnotes-save-btn');
+		btn.setDisabled(true);
+		btn.setText(_('save'));
+	},this);
 };
 Ext.extend(elementNotes.panel.Notes,MODx.Panel, {
-
 	getElementNote: function() {
-		var type = '';
-		if (MODx.request.a.indexOf('snippet') > 0)
-			type = 'snippet';
-		else if (MODx.request.a.indexOf('chunk') > 0)
-			type = 'chunk';
-		else if (MODx.request.a.indexOf('plugin') > 0)
-			type = 'plugin';
-		else if (MODx.request.a.indexOf('template') > 0)
-			type = 'template';
 		MODx.Ajax.request({
-			url: elemNotes.config.connector_url,
+			url: elementNotes.config.connectorUrl,
 			params: {
 				action: 'mgr/note/get',
-				id: MODx.request.id,
-				type: type
+				id: this.note.id,
+				type: this.note.type
 			},
 			listeners: {
 				'success': {fn:function(r) {
@@ -120,6 +80,21 @@ Ext.extend(elementNotes.panel.Notes,MODx.Panel, {
 			}
 		});
 	}
-
+	,saveElementNote:function() {
+		MODx.Ajax.request({
+			url: elementNotes.config.connectorUrl,
+			params: {
+				action: 'mgr/note/save',
+				id: this.note.id,
+				type: this.note.type,
+				text: Ext.getCmp('elementnotes-text').getValue()
+			},
+			listeners: {
+				'success': {fn:function(r) {
+					if(r.success){this.fireEvent('afterSave',{response:r});}
+				},scope:this}
+			}
+		});
+	}
 });
-Ext.reg('elementnotes-page',elementNotes.panel.Notes);
+Ext.reg('elementnotes-panel',elementNotes.panel.Notes);
